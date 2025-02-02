@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastCoins Tetris</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #000;
+            color: white;
+        }
+        canvas {
+            background-color: #111;
+            display: block;
+            margin: auto;
+        }
+        #score {
+            font-size: 20px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>FastCoins Tetris</h1>
+    <p>Earn 1 FSC for every 1000 points!</p>
+    <p id="score">Score: 0</p>
+    <canvas id="gameCanvas" width="300" height="600"></canvas>
+    
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const ROWS = 20;
+        const COLS = 10;
+        const BLOCK_SIZE = 30;
+        let score = 0;
+        
+        function drawBlock(x, y) {
+            ctx.fillStyle = "gold";
+            ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+            ctx.strokeStyle = "black";
+            ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+        }
+        
+        function drawBoard() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let y = 0; y < ROWS; y++) {
+                for (let x = 0; x < COLS; x++) {
+                    drawBlock(x, y);
+                }
+            }
+        }
+        
+        function updateScore() {
+            score += 10;
+            document.getElementById("score").innerText = "Score: " + score;
+            if (score % 1000 === 0) {
+                alert("Congratulations! You earned 1 FSC!");
+            }
+        }
+        
+        setInterval(() => {
+            updateScore();
+            drawBoard();
+        }, 1000);
+    </script>
+</body>
+</html>
