@@ -32,7 +32,7 @@
             border-radius: 10px;
             text-align: center;
         }
-        #restartButton, #claimFSCButton {
+        #restartButton {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 18px;
@@ -41,26 +41,8 @@
             cursor: pointer;
             border-radius: 5px;
         }
-        #restartButton:hover, #claimFSCButton:hover {
+        #restartButton:hover {
             background-color: orange;
-        }
-        #leaderboard {
-            margin-top: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            border-radius: 10px;
-            display: inline-block;
-        }
-        #leaderboard h2 {
-            margin: 0 0 10px 0;
-        }
-        #leaderboard ul {
-            list-style: none;
-            padding: 0;
-        }
-        #leaderboard li {
-            padding: 5px;
-            border-bottom: 1px solid #555;
         }
     </style>
 </head>
@@ -73,11 +55,6 @@
         <h2>Game Over!</h2>
         <p>Your score: <span id="finalScore">0</span></p>
         <button id="restartButton" onclick="restartGame()">Restart Game</button>
-        <button id="claimFSCButton" onclick="claimFSC()">Claim FSC</button>
-    </div>
-    <div id="leaderboard">
-        <h2>Top 10 Players</h2>
-        <ul id="leaderboardList"></ul>
     </div>
     
     <script>
@@ -97,7 +74,6 @@
             [[0, 0, 1], [1, 1, 1]]
         ];
         let currentPiece, currentX, currentY, score;
-        let leaderboard = [];
         
         function initGame() {
             currentPiece = getRandomPiece();
@@ -105,6 +81,7 @@
             currentY = 0;
             score = 0;
             document.getElementById("score").innerText = `Score: ${score}`;
+            drawBoard();
         }
 
         function getRandomPiece() {
@@ -131,19 +108,46 @@
             ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
         }
 
-        function updateLeaderboard() {
-            leaderboard.push(score);
-            leaderboard.sort((a, b) => b - a);
-            leaderboard = leaderboard.slice(0, 10);
-            const leaderboardList = document.getElementById("leaderboardList");
-            leaderboardList.innerHTML = leaderboard.map((s, i) => `<li>${i + 1}. ${s} points</li>`).join("");
+        function moveDown() {
+            currentY++;
+            if (collision(0, 1)) {
+                currentY--;
+                placePiece();
+                currentPiece = getRandomPiece();
+                currentX = 3;
+                currentY = 0;
+                if (collision(0, 0)) gameOver();
+            }
+            drawBoard();
+        }
+
+        function placePiece() {
+            for (let y = 0; y < currentPiece.length; y++) {
+                for (let x = 0; x < currentPiece[y].length; x++) {
+                    if (currentPiece[y][x]) board[currentY + y][currentX + x] = 1;
+                }
+            }
+        }
+
+        function collision(dx, dy) {
+            for (let y = 0; y < currentPiece.length; y++) {
+                for (let x = 0; x < currentPiece[y].length; x++) {
+                    if (currentPiece[y][x]) {
+                        let newX = currentX + x + dx;
+                        let newY = currentY + y + dy;
+                        if (newX < 0 || newX >= COLS || newY >= ROWS || board[newY][newX]) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
         function gameOver() {
             document.getElementById("finalScore").innerText = score;
             document.getElementById("gameOverScreen").style.display = "block";
             canvas.style.display = "none";
-            updateLeaderboard();
         }
 
         function restartGame() {
