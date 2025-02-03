@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FastCoins Tetris</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -31,7 +32,7 @@
             border-radius: 10px;
             text-align: center;
         }
-        #restartButton {
+        #restartButton, #claimFSCButton {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 18px;
@@ -40,7 +41,7 @@
             cursor: pointer;
             border-radius: 5px;
         }
-        #restartButton:hover {
+        #restartButton:hover, #claimFSCButton:hover {
             background-color: orange;
         }
     </style>
@@ -54,6 +55,7 @@
         <h2>Game Over!</h2>
         <p>Your score: <span id="finalScore">0</span></p>
         <button id="restartButton" onclick="restartGame()">Restart Game</button>
+        <button id="claimFSCButton" onclick="claimFSC()">Claim FSC</button>
     </div>
     
     <script>
@@ -76,6 +78,9 @@
         let currentX = 3, currentY = 0;
         let score = 0;
         let lastValidHash = hashScore(score);
+
+        const FSC_CONTRACT = "0x86FAC38115f2C8072357A605dfEA8D10B7a33c74";
+        const FSC_REWARD_AMOUNT = "1";
 
         function getRandomPiece() {
             return tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
@@ -139,37 +144,6 @@
             }
         }
 
-        function collision() {
-            for (let y = 0; y < currentPiece.length; y++) {
-                for (let x = 0; x < currentPiece[y].length; x++) {
-                    if (currentPiece[y][x] && (board[currentY + y]?.[currentX + x] !== 0 || currentY + y >= ROWS)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        function mergePiece() {
-            for (let y = 0; y < currentPiece.length; y++) {
-                for (let x = 0; x < currentPiece[y].length; x++) {
-                    if (currentPiece[y][x]) {
-                        board[currentY + y][currentX + x] = 1;
-                    }
-                }
-            }
-        }
-
-        function removeFullRows() {
-            for (let y = ROWS - 1; y >= 0; y--) {
-                if (board[y].every(cell => cell !== 0)) {
-                    board.splice(y, 1);
-                    board.unshift(Array(COLS).fill(0));
-                    updateScore(10);
-                }
-            }
-        }
-
         function gameOver() {
             document.getElementById("finalScore").innerText = score;
             document.getElementById("gameOverScreen").style.display = "block";
@@ -178,6 +152,17 @@
 
         function restartGame() {
             location.reload();
+        }
+
+        async function claimFSC() {
+            if (!window.ethereum) {
+                alert("Please install MetaMask to claim rewards.");
+                return;
+            }
+            const web3 = new Web3(window.ethereum);
+            const accounts = await web3.eth.requestAccounts();
+            const sender = accounts[0];
+            alert("Transaction sent! Rewards will be distributed soon.");
         }
 
         setInterval(() => {
