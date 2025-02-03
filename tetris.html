@@ -20,6 +20,17 @@
             font-size: 20px;
             margin: 10px;
         }
+        #gameOverScreen {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
         #restartButton {
             margin-top: 20px;
             padding: 10px 20px;
@@ -39,7 +50,11 @@
     <p>Earn 1 FSC for every 1000 points!</p>
     <p id="score">Score: 0</p>
     <canvas id="gameCanvas" width="300" height="600"></canvas>
-    <button id="restartButton" onclick="restartGame()">Restart Game</button>
+    <div id="gameOverScreen">
+        <h2>Game Over!</h2>
+        <p>Your score: <span id="finalScore">0</span></p>
+        <button id="restartButton" onclick="restartGame()">Restart Game</button>
+    </div>
     
     <script>
         const canvas = document.getElementById("gameCanvas");
@@ -100,8 +115,7 @@
                 currentX = 3;
                 currentY = 0;
                 if (collision()) {
-                    alert("Game Over! Your score: " + score);
-                    document.getElementById("restartButton").style.display = "block";
+                    gameOver();
                 }
             }
         }
@@ -139,6 +153,12 @@
                     }
                 }
             }
+        }
+
+        function gameOver() {
+            document.getElementById("finalScore").innerText = score;
+            document.getElementById("gameOverScreen").style.display = "block";
+            canvas.style.display = "none";
         }
 
         function restartGame() {
