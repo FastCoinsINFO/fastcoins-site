@@ -62,8 +62,8 @@
         const ROWS = 20;
         const COLS = 10;
         const BLOCK_SIZE = 30;
-        const board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
-        const tetrominoes = [
+        const board = Object.freeze(Array.from({ length: ROWS }, () => Array(COLS).fill(0)));
+        const tetrominoes = Object.freeze([
             [[1, 1, 1, 1]],
             [[1, 1], [1, 1]],
             [[0, 1, 0], [1, 1, 1]],
@@ -71,17 +71,36 @@
             [[0, 1, 1], [1, 1, 0]],
             [[1, 0, 0], [1, 1, 1]],
             [[0, 0, 1], [1, 1, 1]]
-        ];
+        ]);
         let currentPiece = getRandomPiece();
         let currentX = 3, currentY = 0;
         let score = 0;
+        let lastValidHash = hashScore(score);
 
         function getRandomPiece() {
             return tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
         }
 
-        function rotatePiece(piece) {
-            return piece[0].map((_, i) => piece.map(row => row[i])).reverse();
+        function hashScore(value) {
+            return btoa(value.toString());
+        }
+
+        function validateScore() {
+            return hashScore(score) === lastValidHash;
+        }
+
+        function updateScore(points) {
+            if (!validateScore()) {
+                alert("Cheating detected! Resetting game.");
+                restartGame();
+                return;
+            }
+            score += points;
+            lastValidHash = hashScore(score);
+            document.getElementById("score").innerText = "Score: " + score;
+            if (score % 1000 === 0) {
+                alert("Congratulations! You earned 1 FSC!");
+            }
         }
 
         function drawBlock(x, y) {
@@ -146,11 +165,7 @@
                 if (board[y].every(cell => cell !== 0)) {
                     board.splice(y, 1);
                     board.unshift(Array(COLS).fill(0));
-                    score += 10;
-                    document.getElementById("score").innerText = "Score: " + score;
-                    if (score % 1000 === 0) {
-                        alert("Congratulations! You earned 1 FSC!");
-                    }
+                    updateScore(10);
                 }
             }
         }
@@ -164,19 +179,6 @@
         function restartGame() {
             location.reload();
         }
-
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "ArrowLeft") currentX--;
-            if (event.key === "ArrowRight") currentX++;
-            if (event.key === "ArrowDown") moveDown();
-            if (event.key === "ArrowUp") {
-                let rotatedPiece = rotatePiece(currentPiece);
-                if (!collision(rotatedPiece)) {
-                    currentPiece = rotatedPiece;
-                }
-            }
-            drawBoard();
-        });
 
         setInterval(() => {
             moveDown();
