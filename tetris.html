@@ -20,6 +20,18 @@
             font-size: 20px;
             margin: 10px;
         }
+        #restartButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: gold;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #restartButton:hover {
+            background-color: orange;
+        }
     </style>
 </head>
 <body>
@@ -27,6 +39,7 @@
     <p>Earn 1 FSC for every 1000 points!</p>
     <p id="score">Score: 0</p>
     <canvas id="gameCanvas" width="300" height="600"></canvas>
+    <button id="restartButton" onclick="restartGame()">Restart Game</button>
     
     <script>
         const canvas = document.getElementById("gameCanvas");
@@ -34,36 +47,121 @@
         const ROWS = 20;
         const COLS = 10;
         const BLOCK_SIZE = 30;
+        const board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+        const tetrominoes = [
+            [[1, 1, 1, 1]],
+            [[1, 1], [1, 1]],
+            [[0, 1, 0], [1, 1, 1]],
+            [[1, 1, 0], [0, 1, 1]],
+            [[0, 1, 1], [1, 1, 0]],
+            [[1, 0, 0], [1, 1, 1]],
+            [[0, 0, 1], [1, 1, 1]]
+        ];
+        let currentPiece = getRandomPiece();
+        let currentX = 3, currentY = 0;
         let score = 0;
-        
+
+        function getRandomPiece() {
+            return tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
+        }
+
+        function rotatePiece(piece) {
+            return piece[0].map((_, i) => piece.map(row => row[i])).reverse();
+        }
+
         function drawBlock(x, y) {
             ctx.fillStyle = "gold";
             ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
             ctx.strokeStyle = "black";
             ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
         }
-        
+
         function drawBoard() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let y = 0; y < ROWS; y++) {
                 for (let x = 0; x < COLS; x++) {
-                    drawBlock(x, y);
+                    if (board[y][x]) drawBlock(x, y);
+                }
+            }
+            for (let y = 0; y < currentPiece.length; y++) {
+                for (let x = 0; x < currentPiece[y].length; x++) {
+                    if (currentPiece[y][x]) drawBlock(currentX + x, currentY + y);
                 }
             }
         }
-        
-        function updateScore() {
-            score += 10;
-            document.getElementById("score").innerText = "Score: " + score;
-            if (score % 1000 === 0) {
-                alert("Congratulations! You earned 1 FSC!");
+
+        function moveDown() {
+            currentY++;
+            if (collision()) {
+                currentY--;
+                mergePiece();
+                removeFullRows();
+                currentPiece = getRandomPiece();
+                currentX = 3;
+                currentY = 0;
+                if (collision()) {
+                    alert("Game Over! Your score: " + score);
+                    document.getElementById("restartButton").style.display = "block";
+                }
             }
         }
-        
-        setInterval(() => {
-            updateScore();
+
+        function collision() {
+            for (let y = 0; y < currentPiece.length; y++) {
+                for (let x = 0; x < currentPiece[y].length; x++) {
+                    if (currentPiece[y][x] && (board[currentY + y]?.[currentX + x] !== 0 || currentY + y >= ROWS)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function mergePiece() {
+            for (let y = 0; y < currentPiece.length; y++) {
+                for (let x = 0; x < currentPiece[y].length; x++) {
+                    if (currentPiece[y][x]) {
+                        board[currentY + y][currentX + x] = 1;
+                    }
+                }
+            }
+        }
+
+        function removeFullRows() {
+            for (let y = ROWS - 1; y >= 0; y--) {
+                if (board[y].every(cell => cell !== 0)) {
+                    board.splice(y, 1);
+                    board.unshift(Array(COLS).fill(0));
+                    score += 10;
+                    document.getElementById("score").innerText = "Score: " + score;
+                    if (score % 1000 === 0) {
+                        alert("Congratulations! You earned 1 FSC!");
+                    }
+                }
+            }
+        }
+
+        function restartGame() {
+            location.reload();
+        }
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowLeft") currentX--;
+            if (event.key === "ArrowRight") currentX++;
+            if (event.key === "ArrowDown") moveDown();
+            if (event.key === "ArrowUp") {
+                let rotatedPiece = rotatePiece(currentPiece);
+                if (!collision(rotatedPiece)) {
+                    currentPiece = rotatedPiece;
+                }
+            }
             drawBoard();
-        }, 1000);
+        });
+
+        setInterval(() => {
+            moveDown();
+            drawBoard();
+        }, 500);
     </script>
 </body>
 </html>
