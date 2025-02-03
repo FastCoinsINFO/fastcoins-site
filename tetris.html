@@ -63,6 +63,8 @@
         const ROWS = 20;
         const COLS = 10;
         const BLOCK_SIZE = 30;
+        let dropInterval = 500;
+        let score = 0;
         const board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
         const tetrominoes = [
             [[1, 1, 1, 1]],
@@ -73,15 +75,17 @@
             [[1, 0, 0], [1, 1, 1]],
             [[0, 0, 1], [1, 1, 1]]
         ];
-        let currentPiece, currentX, currentY, score;
-        
+        let currentPiece, currentX, currentY;
+
         function initGame() {
             currentPiece = getRandomPiece();
             currentX = 3;
             currentY = 0;
             score = 0;
+            dropInterval = 500;
             document.getElementById("score").innerText = `Score: ${score}`;
             drawBoard();
+            gameLoop();
         }
 
         function getRandomPiece() {
@@ -127,6 +131,9 @@
                     if (currentPiece[y][x]) board[currentY + y][currentX + x] = 1;
                 }
             }
+            score += 100;
+            document.getElementById("score").innerText = `Score: ${score}`;
+            if (score % 1000 === 0) dropInterval = Math.max(100, dropInterval - 50);
         }
 
         function collision(dx, dy) {
@@ -154,13 +161,18 @@
             location.reload();
         }
 
-        setInterval(moveDown, 500);
+        function gameLoop() {
+            moveDown();
+            setTimeout(gameLoop, dropInterval);
+        }
+
         document.addEventListener("keydown", (event) => {
             if (event.key === "ArrowLeft" && !collision(-1, 0)) currentX--;
             else if (event.key === "ArrowRight" && !collision(1, 0)) currentX++;
             else if (event.key === "ArrowDown") moveDown();
             drawBoard();
         });
+
         initGame();
     </script>
 </body>
