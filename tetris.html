@@ -64,8 +64,8 @@
         const ROWS = 20;
         const COLS = 10;
         const BLOCK_SIZE = 30;
-        const board = Object.freeze(Array.from({ length: ROWS }, () => Array(COLS).fill(0)));
-        const tetrominoes = Object.freeze([
+        const board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+        const tetrominoes = [
             [[1, 1, 1, 1]],
             [[1, 1], [1, 1]],
             [[0, 1, 0], [1, 1, 1]],
@@ -73,48 +73,16 @@
             [[0, 1, 1], [1, 1, 0]],
             [[1, 0, 0], [1, 1, 1]],
             [[0, 0, 1], [1, 1, 1]]
-        ]);
+        ];
         let currentPiece = getRandomPiece();
         let currentX = 3, currentY = 0;
         let score = 0;
         let lastValidHash = hashScore(score);
-
-        const FSC_CONTRACT = "0x86FAC38115f2C8072357A605dfEA8D10B7a33c74";
-        const FSC_REWARD_AMOUNT = "1";
-
+        
         function getRandomPiece() {
             return tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
         }
-
-        function hashScore(value) {
-            return btoa(value.toString());
-        }
-
-        function validateScore() {
-            return hashScore(score) === lastValidHash;
-        }
-
-        function updateScore(points) {
-            if (!validateScore()) {
-                alert("Cheating detected! Resetting game.");
-                restartGame();
-                return;
-            }
-            score += points;
-            lastValidHash = hashScore(score);
-            document.getElementById("score").innerText = "Score: " + score;
-            if (score % 1000 === 0) {
-                alert("Congratulations! You earned 1 FSC!");
-            }
-        }
-
-        function drawBlock(x, y) {
-            ctx.fillStyle = "gold";
-            ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-            ctx.strokeStyle = "black";
-            ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-        }
-
+        
         function drawBoard() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let y = 0; y < ROWS; y++) {
@@ -128,20 +96,10 @@
                 }
             }
         }
-
+        
         function moveDown() {
             currentY++;
-            if (collision()) {
-                currentY--;
-                mergePiece();
-                removeFullRows();
-                currentPiece = getRandomPiece();
-                currentX = 3;
-                currentY = 0;
-                if (collision()) {
-                    gameOver();
-                }
-            }
+            drawBoard();
         }
 
         function gameOver() {
@@ -154,20 +112,26 @@
             location.reload();
         }
 
-        async function claimFSC() {
-            if (!window.ethereum) {
-                alert("Please install MetaMask to claim rewards.");
-                return;
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "ArrowLeft") {
+                currentX--;
+            } else if (event.key === "ArrowRight") {
+                currentX++;
+            } else if (event.key === "ArrowDown") {
+                moveDown();
+            } else if (event.key === "ArrowUp") {
+                rotatePiece();
             }
-            const web3 = new Web3(window.ethereum);
-            const accounts = await web3.eth.requestAccounts();
-            const sender = accounts[0];
-            alert("Transaction sent! Rewards will be distributed soon.");
+            drawBoard();
+        });
+        
+        function rotatePiece() {
+            let rotated = currentPiece[0].map((_, index) => currentPiece.map(row => row[index])).reverse();
+            currentPiece = rotated;
         }
-
+        
         setInterval(() => {
             moveDown();
-            drawBoard();
         }, 500);
     </script>
 </body>
