@@ -32,11 +32,8 @@
                 this.name = name;
                 this.classType = classType;
                 this.level = 1;
-                this.experience = 0;
                 this.hp = 1500; // Начальное здоровье
                 this.maxHp = 1500;
-
-                // Начальные характеристики
                 this.attack = 0;
                 this.magicAttack = 0;
                 this.physicalDefense = 0;
@@ -46,38 +43,34 @@
                 this.updateAttributes();
             }
 
-            // Обновление характеристик в зависимости от класса
             updateAttributes() {
                 if (this.classType === 'Mage') {
-                    this.magicAttack = 10; // Магический урон высокий
+                    this.magicAttack = 10;
                     this.attack = 0;
-                    this.physicalDefense = 2; // Защита слабая
-                    this.magicDefense = 6; // Средняя защита от магии
-                    this.healAmount = this.magicAttack * 0.3; // Лечение зависит от магического урона
+                    this.physicalDefense = 2;
+                    this.magicDefense = 6;
+                    this.healAmount = this.magicAttack * 0.3;
                 } else if (this.classType === 'Fighter') {
-                    this.attack = 6; // Средний физический урон
-                    this.magicAttack = 2; // Низкий магический урон
-                    this.physicalDefense = 12; // Высокая защита
-                    this.magicDefense = 8; // Средняя защита от магии
-                    this.healAmount = 0; // Боец не лечится
+                    this.attack = 6;
+                    this.magicAttack = 2;
+                    this.physicalDefense = 12;
+                    this.magicDefense = 8;
+                    this.healAmount = 0;
                 } else if (this.classType === 'Assassin') {
-                    this.attack = 15; // Очень сильный физический урон
-                    this.magicAttack = 0; // Нет магического урона
-                    this.physicalDefense = 3; // Слабая защита от физики
-                    this.magicDefense = 3; // Слабая защита от магии
-                    this.healAmount = 0; // Ассасин не лечится
+                    this.attack = 15;
+                    this.magicAttack = 0;
+                    this.physicalDefense = 3;
+                    this.magicDefense = 3;
+                    this.healAmount = 0;
                 }
             }
 
-            // Метод для прокачки персонажа
             levelUp() {
                 this.level += 1;
-                this.experience = 0;
-                this.maxHp += 100; // +100 HP за каждый уровень
+                this.maxHp += 100;
                 this.hp = this.maxHp;
             }
 
-            // Метод для увеличения характеристик
             increaseAttribute(attribute) {
                 if (attribute === 'attack') {
                     this.attack += 1;
@@ -90,74 +83,31 @@
                 }
             }
 
-            // Метод для нанесения урона врагу
             takeDamage(damage) {
-                this.hp -= Math.max(0, damage - this.physicalDefense); // Защита учитывается
+                this.hp -= Math.max(0, damage - this.physicalDefense);
                 if (this.hp < 0) this.hp = 0;
             }
 
-            // Лечение персонажа
             heal() {
                 this.hp += this.healAmount;
                 if (this.hp > this.maxHp) this.hp = this.maxHp;
             }
 
-            // Атака по врагу
             attackEnemy(enemy) {
-                const damage = Math.max(0, this.magicAttack || this.attack); // Если маг, атакует магией, если боец - физической атакой
+                const damage = this.magicAttack || this.attack;
                 enemy.takeDamage(damage);
-            }
-        }
-
-        // Классы персонажей
-        class Mage extends Character {
-            constructor(name) {
-                super(name, 'Mage');
-            }
-
-            attackEnemy(enemy) {
-                super.attackEnemy(enemy);
-                this.heal(); // Маг лечится после атаки
-            }
-        }
-
-        class Fighter extends Character {
-            constructor(name) {
-                super(name, 'Fighter');
-            }
-
-            attackEnemy(enemy) {
-                super.attackEnemy(enemy);
-            }
-        }
-
-        class Assassin extends Character {
-            constructor(name) {
-                super(name, 'Assassin');
-            }
-
-            attackEnemy(enemy) {
-                super.attackEnemy(enemy);
             }
         }
 
         class Game {
             constructor() {
-                this.players = [];
                 this.round = 0;
             }
 
-            addPlayer(player) {
-                this.players.push(player);
-            }
-
             battle(player1, player2) {
-                let experience = 300; // Базовый опыт за победу
-                let rounds = this.round;
-
-                // Уменьшение опыта за каждый раунд после 5-го
-                if (rounds > 5) {
-                    experience -= experience * 0.02 * (rounds - 5);
+                let experience = 300;
+                if (this.round > 5) {
+                    experience -= experience * 0.02 * (this.round - 5);
                 }
 
                 while (player1.hp > 0 && player2.hp > 0) {
@@ -166,7 +116,6 @@
                     player2.attackEnemy(player1);
                 }
 
-                // Победитель получает опыт
                 if (player1.hp > 0) {
                     player1.experience += experience;
                     this.checkLevelUp(player1);
@@ -179,16 +128,12 @@
             }
 
             checkLevelUp(player) {
-                const requiredExp = 1000 * Math.pow(1.15, player.level - 1); // Формула для опыта на повышение уровня
+                const requiredExp = 1000 * Math.pow(1.15, player.level - 1);
 
                 if (player.experience >= requiredExp) {
                     player.levelUp();
                     this.log(`${player.name} достиг уровня ${player.level}`);
                 }
-            }
-
-            increasePlayerStats(player, attribute) {
-                player.increaseAttribute(attribute);
             }
 
             log(message) {
@@ -199,16 +144,11 @@
             }
         }
 
-        // Пример создания игроков и начала игры
         const game = new Game();
 
-        const player1 = new Mage('Mage1');
-        const player2 = new Fighter('Fighter1');
+        const player1 = new Character('Mage1', 'Mage');
+        const player2 = new Character('Fighter1', 'Fighter');
 
-        game.addPlayer(player1);
-        game.addPlayer(player2);
-
-        // Кнопка для старта игры
         document.getElementById('startGame').addEventListener('click', () => {
             game.battle(player1, player2);
         });
