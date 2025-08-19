@@ -165,6 +165,7 @@
       }
     }
 </style>
+<link rel="stylesheet" href="menu.css">
 </head>
 <body>
   <header>
@@ -224,7 +225,7 @@
   <div class="container">
     <h2>Live Price</h2>
     <iframe src="https://dexscreener.com/bsc/0x86fac38115f2c8072357a605dfea8d10b7a33c74" height="200" width="100%" style="border:none;"></iframe>
-    <div class="price-widget" id="fscPrice" style="text-align: center; background: rgba(255,255,255,0.15); padding: 20px; border-radius: 15px; width: 200px; margin: 20px auto; font-weight: bold; box-shadow: 0 0 10px rgba(0,0,0,0.2); backdrop-filter: blur(8px);">Loading price...</div>
+    <div class="price-widget" id="fscPrice" style="text-align: center; background: rgba(255,255,255,0.15); padding: 20px; border-radius: 15px; width: 200px; height: 200px; margin: 20px auto; font-weight: bold; box-shadow: 0 0 10px rgba(0,0,0,0.2); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center;">Loading price...</div>
   </div>
 </section>
 
@@ -314,15 +315,23 @@
         const price = data.pair.priceUsd;
         document.getElementById('fscPrice').innerText = `$${parseFloat(price).toFixed(6)} USD`;
       } catch (e) {
-        document.getElementById('fscPrice').innerText = "Price unavailable";
+        if (!document.getElementById('fscPrice').innerText.includes('$')) {
+          document.getElementById('fscPrice').innerText = "Price unavailable";
+        }
       }
     }
 
     fetchFSCPrice();
     setInterval(fetchFSCPrice, 10000);
 </script>
-  <footer style="text-align:center; padding:20px; color:white; font-size:14px; background-color: rgba(0, 0, 0, 0.5); margin-top:40px;">
-    © 2025 FastCoins (FSC). All rights reserved.
-  </footer>
+  <footer style="text-align:center; padding:20px; color:white; font-size:14px; background: rgba(255, 255, 255, 0.1); margin-top:40px; backdrop-filter: blur(8px); border-radius: 12px; max-width: 600px; margin-left: auto; margin-right: auto;">
+  <div style="margin-bottom: 10px;">
+    <a href="https://twitter.com/Fastcoins_FCS" target="_blank" style="margin: 0 10px; color: white;"><i class="fab fa-twitter"></i></a>
+    <a href="https://t.me/fastcoins_official" target="_blank" style="margin: 0 10px; color: white;"><i class="fab fa-telegram"></i></a>
+  </div>
+  <div>
+    © 2025 FastCoins (FSC). All rights reserved. | <a href="#" style="color:white; text-decoration: underline;">Privacy Policy</a>
+  </div>
+</footer>
 </body>
 </html>
