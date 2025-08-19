@@ -1,121 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FastCoins (FSC) - The Future of Fast Transactions</title>
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/FastCoinsINFO/fastcoins-site/main/logo.png">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background: url('https://raw.githubusercontent.com/FastCoinsINFO/fastcoins-site/main/logo.png') no-repeat center center fixed;
-            background-size: cover;
-            color: white;
-        }
-        header {
-            background: rgba(0, 140, 186, 0.8);
-            color: white;
-            padding: 20px;
-            font-size: 24px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            color: black;
-        }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 20px 10px;
-            color: white;
-            background: #008CBA;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 18px;
-        }
-        .button:hover {
-            background: #005f73;
-        }
-        .logo {
-            height: 24px;
-            vertical-align: middle;
-        }
-        .social-links {
-            margin-top: 30px;
-        }
-        .social-links a {
-            margin: 0 10px;
-            color: #008CBA;
-            font-weight: bold;
-            text-decoration: none;
-        }
-        footer {
-            margin-top: 40px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            color: white;
-            font-size: 14px;
-            border-top: 1px solid #ccc;
-        }
-        footer a {
-            color: #00aaff;
-            text-decoration: none;
-        }
-        footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FastCoins (FSC) - The Future of Fast Transactions</title>
+  <meta name="description" content="FastCoins (FSC) is a fast, low-fee cryptocurrency built on Binance Smart Chain for global payments.">
+  <meta name="keywords" content="FastCoins, FSC, crypto, BSC, DeFi, cryptocurrency, fast transactions">
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/FastCoinsINFO/fastcoins-site/main/logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('https://raw.githubusercontent.com/FastCoinsINFO/fastcoins-site/main/logo.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      scroll-behavior: smooth;
+    }
+    header {
+      background: rgba(0, 140, 186, 0.9);
+      color: white;
+      padding: 20px;
+      font-size: 24px;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+    nav {
+      display: flex;
+      gap: 15px;
+    }
+    nav a {
+      position: relative;
+    }
+    nav a.active {
+      font-weight: bold;
+      border-bottom: 2px solid white;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .menu-toggle {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    @media screen and (max-width: 768px) {
+      nav {
+        display: none;
+        flex-direction: column;
+        background-color: rgba(0, 140, 186, 0.95);
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 200px;
+        padding: 10px;
+        border-radius: 0 0 0 10px;
+      }
+      nav.active {
+        display: flex;
+      }
+      .menu-toggle {
+        display: block;
+      }
+    }
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #008CBA;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      display: none;
+      z-index: 1000;
+    }
+    .back-to-top:hover {
+      background: #005f73;
+    }
+      .nav-transition {
+      transition: all 0.3s ease;
+    }
+    nav.active {
+      animation: slideDown 0.3s ease forwards;
+    }
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease-out;
+    }
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .button, .container a {
+      transition: all 0.3s ease;
+    }
+    .button:hover, .container a:hover {
+      transform: scale(1.05);
+      background-color: #006b99;
+    }
+    .fa-brands {
+      transition: transform 0.3s ease;
+    }
+    .fa-brands:hover {
+      transform: rotate(10deg) scale(1.2);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(120deg, rgba(0, 140, 186, 0.1), rgba(255,255,255,0.05));
+      animation: backgroundShift 8s ease infinite alternate;
+      z-index: -1;
+    }
+
+    @keyframes backgroundShift {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(10px, 10px);
+      }
+    }
+
+    .price-widget {
+      color: white;
+      font-size: 24px;
+      margin-top: 20px;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+      }
+    }
+</style>
 </head>
 <body>
-    <header>
-        Welcome to FastCoins (FSC) – The Future of Fast Transactions!
-    </header>
-    <div class="container">
-        <h2>What is FastCoins? <img src="https://raw.githubusercontent.com/FastCoinsINFO/fastcoins-site/main/logo.png" class="logo" alt="FastCoins Logo"></h2>
-        <p>FastCoins (FSC) is a next-generation cryptocurrency designed for ultra-fast, low-fee transactions. Built on Binance Smart Chain (BSC), FSC enables secure and seamless payments worldwide.</p>
-        
-        <h2>Why Choose FastCoins?</h2>
-        <ul style="text-align: left;">
-            <li><strong>🔹 Lightning-Fast Transactions</strong> – Experience near-instant transactions with minimal fees.</li>
-            <li><strong>🔹 Secure & Decentralized</strong> – Built on the robust Binance Smart Chain, ensuring security and transparency.</li>
-            <li><strong>🔹 Deflationary Token Model</strong> – With burning mechanisms in place, the supply reduces over time, increasing value.</li>
-            <li><strong>🔹 Community-Driven</strong> – FastCoins is governed by its community, ensuring fair and decentralized decision-making.</li>
-        </ul>
-        
-        <h2>How to Buy FSC?</h2>
-        <p>FastCoins is available on top DEX platforms like PancakeSwap. Follow these steps to buy FSC:</p>
-        <ol style="text-align: left;">
-            <li>Install and set up <a href="https://metamask.io/" target="_blank">MetaMask</a> or <a href="https://trustwallet.com/" target="_blank">Trust Wallet</a>.</li>
-            <li>Connect to Binance Smart Chain (BSC).</li>
-            <li>Purchase BNB, USDT, or USDC and swap it for FSC on PancakeSwap.</li>
-        </ol>
-        
-        <p><strong>FastCoins (FSC) is also available for trading on Web3 wallets such as Binance, Bybit, OKX, and other DEX platforms!</strong></p>
-        
-        <p><strong>You can also find FastCoins (FSC) on Web3 platforms using the contract address:</strong></p>
-        <p><strong>Contract Address: 0x86FAC38115f2C8072357A605dfEA8D10B7a33c74</strong></p>
-        
-        <a href="https://pancakeswap.finance/swap?outputCurrency=0x86FAC38115f2C8072357A605dfEA8D10B7a33c74&inputCurrency=0x55d398326f99059ff775485246999027b3197955" class="button" target="_blank">Buy FastCoins with USDT</a>
-        <a href="https://pancakeswap.finance/swap?outputCurrency=0x86FAC38115f2C8072357A605dfEA8D10B7a33c74&inputCurrency=0xB8C77482e45F1F44dE1745F52C74426C631BDD52" class="button" target="_blank">Buy FastCoins with BNB</a>
-        <a href="https://pancakeswap.finance/swap?outputCurrency=0x86FAC38115f2C8072357A605dfEA8D10B7a33c74&inputCurrency=0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d" class="button" target="_blank">Buy FastCoins with USDC</a>
-        <a href="FastCoins_Whitepaper.pdf" class="button">Whitepaper</a>
-
-        <div class="social-links">
-            <a href="https://twitter.com/Fastcoins_FCS" target="_blank">Twitter</a> |
-            <a href="https://t.me/fastcoins_official" target="_blank">Telegram</a>
-        </div>
+  <header>
+    <div>FastCoins (FSC)</div>
+    <div class="menu-toggle" id="menuToggle">
+      <i class="fas fa-bars"></i>
     </div>
+    <nav id="mainNav" class="nav-transition">
+      <a href="#">Home</a>
+      <a href="#buy">Buy</a>
+      <a href="#price">Price</a>
+      <a href="#contact-form">Contact</a>
+    </nav>
+  </header>
 
-    <footer>
-        Contact us: <a href="mailto:FastCoins.info@gmail.com">FastCoins.info@gmail.com</a><br>
-        &copy; 2025 FastCoins. All rights reserved.
-    </footer>
+  <section id="home">
+    <div class="container">
+      <h2>Welcome to FastCoins</h2>
+      <p>FastCoins (FSC) is a next-generation cryptocurrency designed for ultra-fast, low-fee transactions...</p>
+    </div>
+  </section>
+
+  <section id="buy">
+    <div class="container">
+      <h2>How to Buy FSC</h2>
+      <p>FastCoins is available on top DEX platforms like PancakeSwap. Follow these steps to buy FSC...</p>
+    </div>
+  </section>
+
+  <section id="price">
+  <div class="container">
+    <h2>Live Price</h2>
+    <iframe src="https://dexscreener.com/bsc/0x86fac38115f2c8072357a605dfea8d10b7a33c74" height="200" width="100%" style="border:none;"></iframe>
+    <div class="price-widget" id="fscPrice">Loading price...</div>
+  </div>
+</section>
+
+  <section id="contact-form">
+    <div class="container">
+      <h2>Contact Us</h2>
+      <form>
+        <!-- contact form fields -->
+      </form>
+    </div>
+  </section>
+
+  <div class="back-to-top" id="backToTop" title="Back to top">
+    ↑
+  </div>
+
+  <script>
+    // Показывать/скрывать кнопку вверх
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.style.display = 'block';
+      } else {
+        backToTop.style.display = 'none';
+      }
+    });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Мобильное бургер-меню
+    const menuToggle = document.getElementById('menuToggle');
+    const mainNav = document.getElementById('mainNav');
+    menuToggle.addEventListener('click', () => {
+      mainNav.classList.toggle('active');
+    });
+
+    // Автозакрытие меню после клика по ссылке (на мобильных)
+    const navLinks = mainNav.querySelectorAll('a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (mainNav.classList.contains('active')) {
+          mainNav.classList.remove('active');
+        }
+      });
+    });
+  // Scroll Spy — Подсветка активного раздела
+    const sections = document.querySelectorAll('section');
+    const navItems = document.querySelectorAll('nav a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= sectionTop - 60) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navItems.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    });
+  // Scroll reveal animation
+    const animatedSections = document.querySelectorAll('section');
+    const revealOnScroll = () => {
+      const triggerBottom = window.innerHeight * 0.85;
+      animatedSections.forEach(section => {
+        const sectionTop = section.getBoundingClientRect().top;
+        if (sectionTop < triggerBottom) {
+          section.classList.add('visible');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+// Update FSC price in real-time (using dexscreener API)
+    async function fetchFSCPrice() {
+      try {
+        const res = await fetch('https://api.dexscreener.com/latest/dex/pairs/bsc/0x86fac38115f2c8072357a605dfea8d10b7a33c74');
+        const data = await res.json();
+        const price = data.pair.priceUsd;
+        document.getElementById('fscPrice').innerText = `$${parseFloat(price).toFixed(6)} USD`;
+      } catch (e) {
+        document.getElementById('fscPrice').innerText = "Price unavailable";
+      }
+    }
+
+    fetchFSCPrice();
+    setInterval(fetchFSCPrice, 10000);
+</script>
 </body>
 </html>
