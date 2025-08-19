@@ -168,24 +168,37 @@
 </head>
 <body>
   <header>
-    <div>FastCoins (FSC)</div>
+    <div style="font-weight:bold; font-size: 20px;"><img src="https://raw.githubusercontent.com/FastCoinsINFO/fastcoins-site/main/logo.png" alt="FSC Logo" style="height:28px; vertical-align: middle; margin-right: 10px;">FastCoins (FSC)</div>
     <div class="menu-toggle" id="menuToggle">
       <i class="fas fa-bars"></i>
     </div>
     <nav id="mainNav" class="nav-transition">
-      <a href="#">Home</a>
-      <a href="#buy">Buy</a>
-      <a href="#price">Price</a>
-      <a href="#contact-form">Contact</a>
-    </nav>
+  <a href="#home" class="button">Home</a>
+  <a href="#buy" class="button">Buy</a>
+  <a href="#price" class="button">Price</a>
+  <a href="#contact-form" class="button">Contact</a>
+</nav>
   </header>
 
   <section id="home">
-    <div class="container">
-      <h2>Welcome to FastCoins</h2>
-      <p>FastCoins (FSC) is a next-generation cryptocurrency designed for ultra-fast, low-fee transactions...</p>
-    </div>
-  </section>
+  <div class="container">
+    <h2>Welcome to FastCoins (FSC)</h2>
+    <p><strong>FastCoins (FSC)</strong> is a next-generation cryptocurrency designed for ultra-fast, low-fee transactions. Built on <strong>Binance Smart Chain (BSC)</strong>, FSC offers secure and seamless payments worldwide.</p>
+    <ul style="text-align:left;">
+      <li><strong>⚡ Lightning-Fast</strong> – Instant confirmation & low fees</li>
+      <li><strong>🔐 Decentralized</strong> – Based on BSC smart contracts</li>
+      <li><strong>🔥 Deflationary</strong> – With burn mechanisms</li>
+      <li><strong>🌍 Community-Driven</strong> – Governed by holders</li>
+    </ul>
+    <p><strong>Add FSC to Wallet:</strong></p>
+    <ul style="text-align:left;">
+      <li><strong>Token Address:</strong> <code>0x86FAC38115f2C8072357A605dfEA8D10B7a33c74</code></li>
+      <li><strong>Decimals:</strong> 18</li>
+      <li><strong>Network:</strong> Binance Smart Chain</li>
+    </ul>
+    <p><a href="FastCoins_Whitepaper.pdf" class="button" target="_blank">📄 Whitepaper</a></p>
+  </div>
+</section>
 
   <section id="buy">
   <div class="container">
@@ -211,7 +224,7 @@
   <div class="container">
     <h2>Live Price</h2>
     <iframe src="https://dexscreener.com/bsc/0x86fac38115f2c8072357a605dfea8d10b7a33c74" height="200" width="100%" style="border:none;"></iframe>
-    <div class="price-widget" id="fscPrice" style="text-align: center; background: rgba(255,255,255,0.15); padding: 10px; border-radius: 10px; width: 200px; margin: 10px auto;">Loading price...</div>
+    <div class="price-widget" id="fscPrice" style="text-align: center; background: rgba(255,255,255,0.15); padding: 20px; border-radius: 15px; width: 200px; margin: 20px auto; font-weight: bold; box-shadow: 0 0 10px rgba(0,0,0,0.2); backdrop-filter: blur(8px);">Loading price...</div>
   </div>
 </section>
 
@@ -308,5 +321,8 @@
     fetchFSCPrice();
     setInterval(fetchFSCPrice, 10000);
 </script>
+  <footer style="text-align:center; padding:20px; color:white; font-size:14px; background-color: rgba(0, 0, 0, 0.5); margin-top:40px;">
+    © 2025 FastCoins (FSC). All rights reserved.
+  </footer>
 </body>
 </html>
