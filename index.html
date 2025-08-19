@@ -175,29 +175,35 @@
     </div>
     <nav id="mainNav" class="nav-transition">
   <a href="#home" class="button">Home</a>
-  <a href="#buy" class="button">Buy</a>
+  <a href="#" class="button" onclick="toggleBuySubmenu(event)">Buy</a>
   <a href="#price" class="button">Price</a>
+  <a href="FastCoins_Whitepaper.pdf" class="button" target="_blank">Whitepaper</a>
   <a href="#contact-form" class="button">Contact</a>
 </nav>
-  </header>
+  <div id="buySubmenu" style="display:none; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); padding: 10px; text-align: center;">
+  <a href="https://pancakeswap.finance/swap?outputCurrency=0x86FAC38115f2C8072357A605dfEA8D10B7a33c74&inputCurrency=0x55d398326f99059ff775485246999027b3197955" class="button" target="_blank">Buy with USDT</a>
+  <a href="https://pancakeswap.finance/swap?outputCurrency=0x86FAC38115f2C8072357A605dfEA8D10B7a33c74&inputCurrency=0xB8C77482e45F1F44dE1745F52C74426C631BDD52" class="button" target="_blank">Buy with BNB</a>
+  <a href="FastCoins_Whitepaper.pdf" class="button" target="_blank">📄 Whitepaper</a>
+</div>
+</header>
 
   <section id="home">
-  <div class="container">
-    <h2>Welcome to FastCoins (FSC)</h2>
+  <div class="container" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); border-radius: 15px; padding: 30px; max-width: 700px; margin: 40px auto; text-align: center; color: white;">
+    <h2 style="margin-bottom: 20px;">Welcome to FastCoins (FSC)</h2>
     <p><strong>FastCoins (FSC)</strong> is a next-generation cryptocurrency designed for ultra-fast, low-fee transactions. Built on <strong>Binance Smart Chain (BSC)</strong>, FSC offers secure and seamless payments worldwide.</p>
-    <ul style="text-align:left;">
+    <ul style="text-align:left; display: inline-block; margin: 20px auto; text-align: left;">
       <li><strong>⚡ Lightning-Fast</strong> – Instant confirmation & low fees</li>
       <li><strong>🔐 Decentralized</strong> – Based on BSC smart contracts</li>
       <li><strong>🔥 Deflationary</strong> – With burn mechanisms</li>
       <li><strong>🌍 Community-Driven</strong> – Governed by holders</li>
     </ul>
-    <p><strong>Add FSC to Wallet:</strong></p>
-    <ul style="text-align:left;">
+    <p style="margin-top: 20px;"><strong>Add FSC to Wallet:</strong></p>
+    <ul style="text-align:left; display: inline-block; margin: 0 auto; text-align: left;">
       <li><strong>Token Address:</strong> <code>0x86FAC38115f2C8072357A605dfEA8D10B7a33c74</code></li>
       <li><strong>Decimals:</strong> 18</li>
       <li><strong>Network:</strong> Binance Smart Chain</li>
     </ul>
-    <p><a href="FastCoins_Whitepaper.pdf" class="button" target="_blank">📄 Whitepaper</a></p>
+    <p style="margin-top: 20px;"><a href="FastCoins_Whitepaper.pdf" class="button" target="_blank">📄 Whitepaper</a></p>
   </div>
 </section>
 
@@ -224,7 +230,9 @@
   <section id="price">
   <div class="container">
     <h2>Live Price</h2>
-    <iframe src="https://dexscreener.com/bsc/0x86fac38115f2c8072357a605dfea8d10b7a33c74" height="200" width="100%" style="border:none;"></iframe>
+    <div style="display: flex; justify-content: center;">
+  <iframe src="https://dexscreener.com/bsc/0x86fac38115f2c8072357a605dfea8d10b7a33c74" width="300" height="300" style="border:none; border-radius: 12px;"></iframe>
+</div>
     <div class="price-widget" id="fscPrice" style="text-align: center; background: rgba(255,255,255,0.15); padding: 20px; border-radius: 15px; width: 200px; height: 200px; margin: 20px auto; font-weight: bold; box-shadow: 0 0 10px rgba(0,0,0,0.2); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center;">Loading price...</div>
   </div>
 </section>
@@ -323,6 +331,11 @@
 
     fetchFSCPrice();
     setInterval(fetchFSCPrice, 10000);
+function toggleBuySubmenu(event) {
+  event.preventDefault();
+  const submenu = document.getElementById('buySubmenu');
+  submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+}
 </script>
   <footer style="text-align:center; padding:20px; color:white; font-size:14px; background: rgba(255, 255, 255, 0.1); margin-top:40px; backdrop-filter: blur(8px); border-radius: 12px; max-width: 600px; margin-left: auto; margin-right: auto;">
   <div style="margin-bottom: 10px;">
